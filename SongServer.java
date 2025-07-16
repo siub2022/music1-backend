@@ -1,11 +1,10 @@
 import static spark.Spark.*;
 import java.sql.*;
-import java.util.Properties;
-import java.io.FileInputStream;
 
 public class SongServer {
     public static void main(String[] args) {
-        port(4567); // Browser will access http://localhost:4567
+        // Use Render-provided PORT
+        port(Integer.parseInt(System.getenv("PORT")));
 
         get("/", (req, res) -> {
             StringBuilder html = new StringBuilder();
@@ -13,11 +12,10 @@ public class SongServer {
             html.append("<h1>🎵 Songs in Your Database</h1>");
 
             try {
-                Properties props = new Properties();
-                props.load(new FileInputStream("dbconfig.properties"));
-                String url = props.getProperty("db.url");
-                String user = props.getProperty("db.username");
-                String password = props.getProperty("db.password");
+                // Read DB credentials from Render environment variables
+                String url = System.getenv("DB_URL");
+                String user = System.getenv("DB_USER");
+                String password = System.getenv("DB_PASS");
 
                 Connection conn = DriverManager.getConnection(url, user, password);
                 Statement stmt = conn.createStatement();
