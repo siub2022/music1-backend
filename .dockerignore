@@ -1,0 +1,10 @@
+# Exclude compiled artifacts
+*.class
+
+# Ignore build/output folders
+target/
+out/
+
+# Ignore IDE folders
+.idea/
+.vscode/
