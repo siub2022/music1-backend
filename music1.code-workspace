@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../music1"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"terminal.integrated.accessibleViewPreserveCursorPosition": true
+	}
+}
