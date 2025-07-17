@@ -8,33 +8,28 @@ public class SongServer {
 
         get("/", (req, res) -> {
             StringBuilder html = new StringBuilder();
-            html.append("<html><head><meta charset='UTF-8'><title>Song List</title></head><body>");
+            html.append("<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Song List</title></head><body>");
             html.append("<h1>🎵 Songs in Your Database</h1>");
 
-            try {
-                // Read DB credentials from Render environment variables
-                String dbUrl = System.getenv("DB_URL");
-                String user = System.getenv("DB_USER");
-                String password = System.getenv("DB_PASS");
-
-                Connection conn = DriverManager.getConnection(dbUrl, user, password);
+            html.append("<ul>");
+            try (
+                Connection conn = DriverManager.getConnection(
+                    System.getenv("DB_URL"),
+                    System.getenv("DB_USER"),
+                    System.getenv("DB_PASS")
+                );
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT title FROM table1");
-
-                html.append("<ul>");
+                ResultSet rs = stmt.executeQuery("SELECT title FROM table1")
+            ) {
                 while (rs.next()) {
                     String title = rs.getString("title");
                     if (title != null && !title.trim().isEmpty()) {
                         html.append("<li>").append(title).append("</li>");
                     }
                 }
-                html.append("</ul>");
-
-                rs.close();
-                stmt.close();
-                conn.close();
             } catch (Exception e) {
-                html.append("<p>Error loading songs: ").append(e.getMessage()).append("</p>");
+                html.append("</ul>"); // Close list even if error
+                html.append("<p style='color:red;'>Error loading songs: ").append(e.getMessage()).append("</p>");
             }
 
             html.append("</body></html>");
