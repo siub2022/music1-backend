@@ -1,3 +1,5 @@
+# Force rebuild: July 17, 2025
+
 # This Dockerfile uses explicit COPY to prevent .class leakage
 # Use OpenJDK 17 as base image
 FROM openjdk:17
